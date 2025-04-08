@@ -4,20 +4,55 @@ const userModel = require('../models/user.model');
 const UserModel = require('../models/user.model');
 const ObjectID = require("mongoose").Types.ObjectId;
 
+const fs = require('fs');
+const path = require('path');
+const { uploadErrors } = require('../utils/errors.utils');
+
+
 module.exports.createPost = async (req, res) => {
-    const Post = PostModel({
-        posterId: req.body.posterId,
-        message: req.body.message,
-        video: req.body.video,
-        Likers: [],
-        comments: [],
-    });
+    let fileName = "";
 
     try {
-        const newPost = await Post.save();
+        // Upload image s'il y en a une
+        if (req.file != null) {
+            // Affiche le contenu du fichier pour debug
+            console.log("req.file:", req.file);
+            
+            // Vérification avec une regex pour JPEG et PNG
+            if (!req.file.mimetype.match(/^image\/(jpeg|png)$/))
+                throw new Error("invalid file");
+
+            if (req.file.size > 10000000) throw new Error("max size");
+
+            fileName = req.body.posterId + Date.now() + '.jpg';
+
+            const uploadPath = path.join(__dirname, "../uploads/posts");
+
+            if (!fs.existsSync(uploadPath)) {
+                fs.mkdirSync(uploadPath, { recursive: true });
+            }
+
+            await fs.promises.writeFile(
+                path.join(uploadPath, fileName),
+                req.file.buffer
+            );
+        }
+
+        // Création du post (avec ou sans image)
+        const post = new PostModel({
+            posterId: req.body.posterId,
+            message: req.body.message,
+            picture: req.file != null ? "./uploads/posts/" + fileName : "",
+            video: req.body.video,
+            likers: [],
+            comments: [],
+        });
+
+        const newPost = await post.save();
         res.status(201).json(newPost);
     } catch (err) {
-        res.status(400).send(err);
+        const errors = uploadErrors(err);
+        res.status(400).json({ errors });
     }
 };
 

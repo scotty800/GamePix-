@@ -1,9 +1,7 @@
 const UserModel = require('../models/user.model');
 const fs = require('fs');
-const { promisify } = require("util");
-const pipeline = promisify(require('stream').pipeline);
+const path = require('path');
 const { uploadErrors } = require('../utils/errors.utils');
-const path = require("path");
 
 module.exports.profilUpload = async (req, res) => {
     try {
@@ -19,7 +17,7 @@ module.exports.profilUpload = async (req, res) => {
             throw new Error("Invalid file type");
         }
 
-        if (req.file.size > 10000000) {
+        if (req.file.size > 500000) {
             throw new Error("File size exceeds the maximum allowed size of 10MB");
         }
 
@@ -30,15 +28,26 @@ module.exports.profilUpload = async (req, res) => {
             fs.mkdirSync(uploadPath, { recursive: true });
         }
 
-        // ⚠️ utilise writeFile avec le buffer, pas pipeline
         await fs.promises.writeFile(
             path.join(uploadPath, fileName),
             req.file.buffer
         );
 
-        return res.status(200).json({ message: "File uploaded successfully" });
+        // ✅ Met à jour l'utilisateur après l'upload
+        const userPicture = await UserModel.findByIdAndUpdate(
+            req.params.userId,
+            { $set: { picture: "./uploads/profil/" + fileName } },
+            { new: true, upsert: true, setDefaultsOnInsert: true }
+        );
+
+        if (!userPicture) {
+            return res.status(404).send("User not found");
+        }
+
+        return res.status(200).json({ message: "File uploaded and user updated", user: userPicture });
+
     } catch (err) {
-        console.error("Caught error:", err);
-        return res.status(400).json({ err: err.message || "Unknown error occurred" });
+        const errors = uploadErrors(err);
+        return res.status(400).json({ errors });
     }
 };
