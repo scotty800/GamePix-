@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 mongoose
-        .connect("mongodb+srv://" + process.env.DB_USER_PASS + "@gamepix.do3yn.mongodb.net/GamePix",
+        .connect(process.env.DB_URL,
 
 )
 .then(() => console.log('Connected to MongoDB'))

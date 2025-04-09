@@ -6,8 +6,17 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 require("./config/db");
 const {checkUser, requireAuth} = require('./middleware/auth.middleware')
+const cors = require('cors');
 
 const app = express();
+
+app.use(cors (
+    {
+        origin: process.env.FRONT_URL,
+        methods: 'GET, POST, PUT, DELETE, PATCH',
+        credentials: true,
+    }
+))
 
 //Middleware
 app.use(bodyParser.json());
