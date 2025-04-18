@@ -11,7 +11,7 @@ router.post("/login", authController.signIn);
 router.get("/logout", authController.logout);
 
 // user display: 'block',
-router.get("/", userController.getAllUsers);
+router.get("/getalluser", userController.getAllUsers);
 router.get("/:id", userController.userInfo);
 router.put("/:id", userController.userUpdate);
 router.delete("/:id", userController.deleteUser);
@@ -20,6 +20,7 @@ router.patch("/unfollow/:id", userController.unfollow);
 
 
 // upload
-router.post('/upload', upload.single('file') , uploadController.profilUpload);
+router.post('/upload/profil', upload.single('file') , uploadController.profilUpload);
+router.get("/getprofilepic/:username", uploadController.getProfilePicture);
 
 module.exports = router;

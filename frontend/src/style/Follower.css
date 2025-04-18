@@ -1,0 +1,83 @@
+/* Conteneur principal */
+.follower-container-enhanced {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 25px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Section stats */
+.stats-section-enhanced {
+  display: flex;
+  gap: 40px;
+  text-align: center;
+  width: 100%;
+  justify-content: center;
+}
+
+/* Item stat */
+.stat-item-enhanced {
+  display: flex;
+  flex-direction: column;
+  min-width: 80px;
+}
+
+/* Titre stat */
+.stat-title-enhanced {
+  font-weight: 600;
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 8px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+/* Chiffre stat */
+.stat-count-enhanced {
+  font-weight: 700;
+  font-size: 22px;
+  color: white;
+}
+
+/* Bouton follow */
+.follow-button-enhanced {
+  background: linear-gradient(135deg, #4a6bff, #6a5acd);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 24px;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  width: 100%;
+  max-width: 220px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.follow-button-enhanced:hover {
+  background: linear-gradient(135deg, #3a5bef, #5a4acd);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.follow-button-enhanced.following {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+}
+
+.follow-button-enhanced.following:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+
+  

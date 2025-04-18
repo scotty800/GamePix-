@@ -1,0 +1,20 @@
+  .page-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .background-home {
+    flex: 1;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    background-color: #16171d;
+    min-height: 100vh;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+  }

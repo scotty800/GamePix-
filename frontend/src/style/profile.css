@@ -1,0 +1,94 @@
+/* Variables */
+:root {
+  --navbar-height: 80px;
+  --bg-dark: #16171d;
+  --primary-color: #4a6bff;
+  --secondary-color: #8a2be2;
+  --content-width: 935px;
+  --border-radius: 12px;
+}
+
+/* Structure principale */
+.profile-root {
+  min-height: 100vh;
+  background-color: var(--bg-dark);
+  color: white;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.profile-container {
+  padding-top: var(--navbar-height);
+  display: flex;
+  justify-content: center;
+}
+
+/* Layout grid */
+.profile-page {
+  width: var(--content-width);
+  display: grid;
+  grid-template-columns: 350px 1fr;
+  gap: 30px;
+  padding: 30px 20px;
+  align-items: start;
+}
+
+/* Colonne profil */
+.profile-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.profile-header {
+  position: sticky;
+  top: calc(var(--navbar-height) + 30px);
+  padding: 25px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: var(--border-radius);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+}
+
+.profile-header h2 {
+  margin-top: 15px;
+  font-size: 24px;
+  color: white;
+}
+
+/* Colonne followers */
+.follower-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.follower-section-enhanced {
+  position: sticky;
+  top: calc(var(--navbar-height) + 30px);
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: var(--border-radius);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Éléments communs */
+.loading, .error, .not-found {
+  padding: 2rem;
+  text-align: center;
+  font-size: 1.2rem;
+  color: white;
+}
+
+/* Responsive */
+@media (max-width: 1000px) {
+  .profile-page {
+    grid-template-columns: 1fr;
+  }
+  
+  .profile-header, .follower-section-enhanced {
+    position: static;
+  }
+}
+
+  

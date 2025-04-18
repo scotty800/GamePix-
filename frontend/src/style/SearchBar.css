@@ -1,0 +1,94 @@
+.search-bar {
+    position: relative; /* Ajouté pour contenir les résultats positionnés en absolu */
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+.group {
+    display: flex;
+    align-items: center;
+    position: relative;
+    width: 100%; /* Assure que le groupe prend toute la largeur */
+}
+
+.input {
+    font-family: "Montserrat", sans-serif;
+    width: 100%;
+    height: 45px;
+    padding: 0 2.5rem 0 1rem; /* Meilleure gestion du padding */
+    box-shadow: 0 0 0 1.5px #2b2c37, 0 0 25px -17px #000;
+    border: 0;
+    border-radius: 12px;
+    background-color: #16171d;
+    outline: none;
+    color: #bdbecb;
+}
+
+.input::placeholder {
+    color: #bdbecb;
+}
+
+.search-icon {
+    position: absolute;
+    right: 1rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    pointer-events: none; /* Empêche l'icône d'interférer avec les clics */
+}
+
+.search-results {
+    margin-top: 0.5em;
+    list-style: none;
+    padding: 0;
+    background: #16171d;
+    border: 1px solid #2b2c37;
+    border-radius: 8px;
+    max-height: 200px;
+    overflow-y: auto;
+    position: absolute;
+    width: calc(100% - 2px); /* Prend en compte la bordure */
+    left: 0; /* Alignement parfait */
+    top: 100%; /* Place juste en dessous de l'input */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Ombre pour le relief */
+    z-index: 1000; /* Valeur élevée pour être au-dessus */
+}
+
+.search-result-item {
+    padding: 0.75em 1em; /* Un peu plus d'espace */
+    color: white;
+    border-bottom: 1px solid #2f303d;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.search-result-item:last-child {
+    border-bottom: none; /* Pas de bordure sur le dernier élément */
+}
+
+.search-result-item:hover {
+    background-color: #2f303d;
+}
+
+.no-results {
+    padding: 0.75em 1em;
+    color: #ff5555; /* Rouge plus visible */
+    font-style: italic;
+    margin: 0;
+    position: relative; /* Permet de déplacer le texte */
+    top: -5 px; /* Remonte légèrement le texte */
+    background-color: #16171d;
+    border: 1px solid #ff5555; /* Bordure rouge */
+    border-radius: 8px;
+    margin-top: 0.5em; /* Espace avec la barre de recherche */
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+.no-results-wrapper {
+    position: absolute;
+    width: 100%;
+    z-index: 1000;
+}

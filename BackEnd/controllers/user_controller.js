@@ -8,19 +8,55 @@ module.exports.getAllUsers = async (req, res) => {
 };
 
 module.exports.userInfo = async (req, res) => {
-    if (!ObjectID.isValid(req.params.id))
-        return res.status(404).send('ID unKnown : ' + req.params.id)
     try {
-        const user = await UserModel.findById(req.params.id)
-        if (!user) {
-            return res.status(404).send('User not found');
+        // 1. Validation de l'ID
+        if (!ObjectID.isValid(req.params.id)) {
+            return res.status(400).json({ 
+                success: false,
+                message: 'ID utilisateur invalide'
+            });
         }
-        res.status(200).json(user)
+
+        // 2. Récupération de l'utilisateur
+        const user = await UserModel.findById(req.params.id)
+            .select('-password') // Exclure le mot de passe
+            .populate('followers following', 'pseudo profileImg'); // Peupler les followers/following avec les infos basiques
+
+        if (!user) {
+            return res.status(404).json({ 
+                success: false,
+                message: 'Utilisateur non trouvé'
+            });
+        }
+
+        // 3. Formatage de la réponse
+        const userData = {
+            _id: user._id,
+            pseudo: user.pseudo,
+            email: user.email,
+            bio: user.bio,
+            profileImg: user.profileImg,
+            followers: user.followers,
+            following: user.following,
+            createdAt: user.createdAt,
+            isCurrentUser: req.user?._id?.toString() === user._id.toString()
+        };
+
+        // 4. Envoi de la réponse
+        res.status(200).json({
+            success: true,
+            user: userData
+        });
+
     } catch (err) {
-        console.log('ID unKnown :' + err);
-        res.status(500).send('An error occurred');
+        console.error('Erreur dans userInfo:', err);
+        res.status(500).json({
+            success: false,
+            message: 'Erreur serveur lors de la récupération du profil',
+            error: process.env.NODE_ENV === 'development' ? err.message : undefined
+        });
     }
-}
+};
 
 module.exports.userUpdate = async (req, res) => {
     if (!ObjectID.isValid(req.params.id))

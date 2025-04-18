@@ -51,7 +51,7 @@
 /* Titre du formulaire */
 #heading {
   text-align: center;
-  color: #FFFF00;
+  color: #ffffff;
   font-size: 1.8em;
   margin-bottom: 20px;
 }
@@ -84,7 +84,7 @@
   border-radius: 5px;
   border: none;
   font-weight: bold;
-  background-color: #FFFF00;
+  background-color: #ffffff;
   color: #000000;
   cursor: pointer;
   transition: background-color 0.3s ease-in-out;
@@ -118,7 +118,6 @@
 
 .logo {
   display: block;
-  margin: 0 auto;
   max-width: 200px;
   height: auto;
   margin-top: 20px;
