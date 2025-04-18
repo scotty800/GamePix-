@@ -1,4 +1,3 @@
-const userModel = require("../models/user.model");
 const UserModel = require("../models/user.model");
 const ObjectID = require("mongoose").Types.ObjectId;
 
@@ -87,7 +86,7 @@ module.exports.deleteUser = async (req, res) => {
         return res.status(404).send('ID unKnown : ' + req.params.id);
 
     try {
-        const userDelete = await userModel.findByIdAndDelete(req.params.id)
+        const userDelete = await UserModel.findByIdAndDelete(req.params.id)
         if (!userDelete) {
             return res.status(404).send({ message: "User not found." });
         }
@@ -103,7 +102,7 @@ module.exports.follower = async (req, res) => {
 
     try {
         // add to the follower list 
-        const followUser = await userModel.findByIdAndUpdate(
+        const followUser = await UserModel.findByIdAndUpdate(
             req.params.id,
             {
                 $addToSet: { following: req.body.idtoFollow }
@@ -115,7 +114,7 @@ module.exports.follower = async (req, res) => {
         }
 
         // add to the following list
-        const followingUser = await userModel.findByIdAndUpdate(
+        const followingUser = await UserModel.findByIdAndUpdate(
             req.body.idtoFollow,
             {
                 $addToSet: { followers: req.params.id }

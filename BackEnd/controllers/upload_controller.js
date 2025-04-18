@@ -17,7 +17,7 @@ module.exports.profilUpload = async (req, res) => {
             throw new Error("Invalid file type");
         }
 
-        if (req.file.size > 500000) {
+        if (req.file.size >  10 * 1024 * 1024) {
             throw new Error("File size exceeds the maximum allowed size of 10MB");
         }
 
@@ -49,5 +49,20 @@ module.exports.profilUpload = async (req, res) => {
     } catch (err) {
         const errors = uploadErrors(err);
         return res.status(400).json({ errors });
+    }
+};
+
+module.exports.getProfilePicture = async (req, res) => {
+    try {
+        const { username } = req.params;
+        const user = await UserModel.findOne({ pseudo: username });
+
+        if (!user || !user.picture) {
+            return res.status(404).json({ message: "Photo de profil non trouvée" });
+        }
+
+        res.status(200).json({ imageUrl: user.picture });
+    } catch (error) {
+        res.status(500).json({ message: "Erreur serveur" });
     }
 };
