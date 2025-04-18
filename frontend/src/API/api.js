@@ -122,3 +122,13 @@ export const getUserInfo = async (userId) => {
     throw error;
   }
 };
+
+export const updateUserBio = async (id, newBio) => {
+  try {
+    const response = await apiInstance.put(`/user/${id}`, { bio: newBio });
+    return response.data;
+  } catch (err) {
+    console.error("Erreur lors de la mise à jour de la bio", err);
+    throw err;
+  }
+};

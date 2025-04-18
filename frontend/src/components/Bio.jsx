@@ -7,7 +7,7 @@ export default function Bio({ initialBio = "", onSaveBio, isOwnProfile }) {
   const [showSavedMessage, setShowSavedMessage] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
-  // Définir la fonction handleChange qui manquait
+  // Définir la fonction handleChange
   const handleChange = (e) => {
     setBio(e.target.value);
   };
@@ -27,18 +27,18 @@ export default function Bio({ initialBio = "", onSaveBio, isOwnProfile }) {
     try {
       await onSaveBio(bio);
       setShowSavedMessage(true);
-      setTimeout(() => setShowSavedMessage(false), 2000);
+      setTimeout(() => setShowSavedMessage(false), 2000);  // Message de confirmation
+      setIsEditing(false); // Masque le champ de texte après la sauvegarde
     } catch (error) {
       console.error("Erreur sauvegarde bio:", error);
-      setBio(initialBio);
+      setBio(initialBio);  // Restaure la bio originale en cas d'échec
     } finally {
       setIsSaving(false);
-      setIsEditing(false);
     }
   };
 
   const handleEdit = () => {
-    setIsEditing(true);
+    setIsEditing(true);  // Active l'édition
   };
 
   if (!isOwnProfile) {
@@ -76,16 +76,20 @@ export default function Bio({ initialBio = "", onSaveBio, isOwnProfile }) {
           <div className="bio-counter">{bio.length}/150</div>
         </>
       ) : (
-        <div className="bio-display" onClick={isSaving ? undefined : handleEdit}>
-          {bio || (
-            <span className="bio-placeholder">
-              Cliquez pour ajouter une bio...
-            </span>
-          )}
+        <>
+          {/* Affiche la bio seulement si elle est modifiée ou pas encore modifiée */}
+          <div className="bio-display" onClick={isSaving ? undefined : handleEdit}>
+            {bio || (
+              <span className="bio-placeholder">
+                Cliquez pour ajouter une bio...
+              </span>
+            )}
+          </div>
+          {/* Affiche le message de confirmation seulement après la sauvegarde */}
           {showSavedMessage && (
             <div className="bio-saved-message">Bio sauvegardée !</div>
           )}
-        </div>
+        </>
       )}
     </div>
   );

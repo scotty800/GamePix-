@@ -6,9 +6,10 @@ import ProfileImg from "../components/ProfileImg";
 import Follower from "../components/Follower";
 import Bio from "../components/Bio";
 import "../style/profile.css";
+import { updateUserBio } from "../API/api";
 
 const UserProfile = () => {
-  const { user: currentUser } = useAuth();
+  const { user: currentUser, updateUser } = useAuth();
   const { id: userId } = useParams();
   const [profileUser, setProfileUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -50,11 +51,21 @@ const UserProfile = () => {
             <div className="profile-header">
               <ProfileImg username={profileUser.pseudo} size="large" />
               <h2>{profileUser.pseudo}</h2>
-              {profileUser.bio && <p className="profile-bio">{profileUser.bio}</p>}
             </div>
-            <Bio 
+            <Bio
               initialBio={profileUser.bio || ""}
-              onSaveBio={(bio) => console.log('Bio saved:', bio)}
+              onSaveBio={async (bio) => {
+                try {
+                  const updatedUser = await updateUserBio(profileUser._id, bio);
+                  if (isOwnProfile) {
+                    // Met à jour les données utilisateur via le contexte
+                    updateUser({ bio: updatedUser.bio });
+                  }
+                  setProfileUser((prev) => ({ ...prev, bio: updatedUser.bio }));
+                } catch (error) {
+                  console.error("Erreur lors de la sauvegarde de la bio :", error);
+                }
+              }}
               isOwnProfile={isOwnProfile}
             />
           </div>

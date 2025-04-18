@@ -10,7 +10,7 @@ module.exports.userInfo = async (req, res) => {
     try {
         // 1. Validation de l'ID
         if (!ObjectID.isValid(req.params.id)) {
-            return res.status(400).json({ 
+            return res.status(400).json({
                 success: false,
                 message: 'ID utilisateur invalide'
             });
@@ -22,7 +22,7 @@ module.exports.userInfo = async (req, res) => {
             .populate('followers following', 'pseudo profileImg'); // Peupler les followers/following avec les infos basiques
 
         if (!user) {
-            return res.status(404).json({ 
+            return res.status(404).json({
                 success: false,
                 message: 'Utilisateur non trouvé'
             });
@@ -59,27 +59,27 @@ module.exports.userInfo = async (req, res) => {
 
 module.exports.userUpdate = async (req, res) => {
     if (!ObjectID.isValid(req.params.id))
-        return res.status(404).send('ID unKnown :' + req.params.id);
+        return res.status(404).send('ID inconnu :' + req.params.id);
+
+    const fieldsToUpdate = {};
+    if (req.body.bio !== undefined) fieldsToUpdate.bio = req.body.bio;
+    if (req.body.pseudo !== undefined) fieldsToUpdate.pseudo = req.body.pseudo;
 
     try {
-        const updateUser = await UserModel.findByIdAndUpdate(
-            { _id: req.params.id },
-            {
-                $set: {
-                    bio: req.body.bio,
-                    pseudo: req.body.pseudo
-                }
-            },
-            { new: true, upsert: true, setDefaultsOnInsert: true }
+        const updatedUser = await UserModel.findByIdAndUpdate(
+            req.params.id,
+            { $set: fieldsToUpdate },
+            { new: true, upsert: false }
         );
-        if (!updateUser) {
-            return res.status(404).send('User not found')
-        }
-        res.status(200).json(updateUser);
+
+        if (!updatedUser) return res.status(404).send('Utilisateur non trouvé');
+
+        res.status(200).json(updatedUser);
     } catch (err) {
-        res.status(500).json({ message: err });
+        res.status(500).json({ message: err.message });
     }
-}
+};
+
 
 module.exports.deleteUser = async (req, res) => {
     if (!ObjectID.isValid(req.params.id))
