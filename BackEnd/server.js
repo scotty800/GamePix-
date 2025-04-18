@@ -13,16 +13,16 @@ const app = express();
 const allowedOrigins = process.env.FRONT_URLS.split(",");
 
 app.use(cors({
-  origin: (origin, callback) => {
-    if (allowedOrigins.includes(origin) || !origin) {
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
-      callback(new Error("Not allowed by CORS"));
+      callback(new Error("Not allowed by CORS: " + origin));
     }
   },
-  methods: 'GET, POST, PUT, DELETE, PATCH',
   credentials: true,
-  allowedHeaders: "Content-Type",
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+  allowedHeaders: ["Content-Type", "Authorization"],
 }));
 
 
@@ -30,6 +30,7 @@ app.use(cors({
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(cookieParser());
+
 
 // jwt
 app.get('*', checkUser);
