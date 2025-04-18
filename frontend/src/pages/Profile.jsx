@@ -15,27 +15,49 @@ const UserProfile = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const loadProfileData = async () => {
-      try {
-        if (!userId || userId === ':id' || userId === 'undefined') {
-          if (!currentUser) throw new Error('Utilisateur non connecté');
-          setProfileUser(currentUser);
-          return;
-        }
-
-        const data = await getUserInfo(userId);
-        setProfileUser(data);
-      } catch (err) {
-        setError(err.message);
-        console.error('Erreur chargement profil:', err);
-      } finally {
-        setLoading(false);
+  const fetchProfileData = async () => {
+    try {
+      if (!userId || userId === ':id' || userId === 'undefined') {
+        if (!currentUser) throw new Error('Utilisateur non connecté');
+        return currentUser;
       }
-    };
+      return await getUserInfo(userId);
+    } catch (err) {
+      throw err;
+    }
+  };
 
+  const loadProfileData = async () => {
+    try {
+      const data = await fetchProfileData();
+      setProfileUser(data);
+      setError(null);
+    } catch (err) {
+      setError(err.message);
+      console.error('Erreur chargement profil:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     loadProfileData();
   }, [userId, currentUser]);
+
+  const updateProfileUserData = async () => {
+    try {
+      const updatedProfileUser = await fetchProfileData();
+      setProfileUser(updatedProfileUser);
+      
+      // Si l'utilisateur courant est affecté, rafraîchir ses données
+      if (currentUser) {
+        const updatedCurrentUser = await getUserInfo(currentUser._id);
+        updateUser(updatedCurrentUser);
+      }
+    } catch (err) {
+      console.error("Erreur rafraîchissement données:", err);
+    }
+  };
 
   if (loading) return <div className="loading">Chargement...</div>;
   if (error) return <div className="error">{error}</div>;
@@ -58,12 +80,11 @@ const UserProfile = () => {
                 try {
                   const updatedUser = await updateUserBio(profileUser._id, bio);
                   if (isOwnProfile) {
-                    // Met à jour les données utilisateur via le contexte
                     updateUser({ bio: updatedUser.bio });
                   }
-                  setProfileUser((prev) => ({ ...prev, bio: updatedUser.bio }));
+                  setProfileUser(prev => ({ ...prev, bio: updatedUser.bio }));
                 } catch (error) {
-                  console.error("Erreur lors de la sauvegarde de la bio :", error);
+                  console.error("Erreur sauvegarde bio:", error);
                 }
               }}
               isOwnProfile={isOwnProfile}
@@ -76,9 +97,14 @@ const UserProfile = () => {
                 currentUserId={currentUser?._id}
                 targetUserId={profileUser._id}
                 initialFollowed={currentUser?.following?.includes(profileUser._id)}
-                followersCount={profileUser.followers?.length || 0}
-                followingCount={profileUser.following?.length || 0}
-                showButton={!isOwnProfile}
+                initialFollowersCount={profileUser.followers?.length || 0}
+                initialFollowingCount={
+                  isOwnProfile 
+                    ? currentUser?.following?.length || 0 
+                    : profileUser.following?.length || 0
+                }
+                onFollowChange={updateProfileUserData}
+                isOwnProfile={isOwnProfile}
               />
             </div>
           </div>

@@ -92,7 +92,7 @@ export const getProfilePicture = async (username) => {
 
 export const followUser = async (userId, idToFollow) => {
   try {
-    const response = await apiInstance.patch(`/follow/${userId}`, { idtoFollow: idToFollow });
+    const response = await apiInstance.patch(`/user/follow/${userId}`, { idtoFollow: idToFollow });
     return response.data;
   } catch (error) {
     throw error.response?.data || { message: "Une erreur est survenue" };
@@ -101,7 +101,7 @@ export const followUser = async (userId, idToFollow) => {
 
 export const unfollowUser = async (userId, idToUnfollow) => {
   try {
-    const response = await apiInstance.patch(`/unfollow/${userId}`, { idTounFollow: idToUnfollow });
+    const response = await apiInstance.patch(`/user/unfollow/${userId}`, { idTounFollow: idToUnfollow });
     return response.data;
   } catch (error) {
     throw error.response?.data || { message: "Une erreur est survenue" };
