@@ -7,6 +7,7 @@ const cookieParser = require("cookie-parser");
 require("./config/db");
 const {checkUser, requireAuth} = require('./middleware/auth.middleware')
 const cors = require('cors');
+const path = require('path');
 
 const app = express();
 
@@ -41,6 +42,8 @@ app.get('/jwtid', requireAuth, (req, res) => {
 //route
 app.use('/api/user', userRoutes);
 app.use('/api/post', postRoutes);
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 //server
 app.listen(process.env.PORT, () => {

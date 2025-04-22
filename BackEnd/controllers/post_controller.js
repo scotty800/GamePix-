@@ -1,7 +1,5 @@
 const postModel = require('../models/post.model');
-const PostModel = require('../models/post.model');
 const userModel = require('../models/user.model');
-const UserModel = require('../models/user.model');
 const ObjectID = require("mongoose").Types.ObjectId;
 
 const fs = require('fs');
@@ -17,7 +15,7 @@ module.exports.createPost = async (req, res) => {
         if (req.file != null) {
             // Affiche le contenu du fichier pour debug
             console.log("req.file:", req.file);
-            
+
             // Vérification avec une regex pour JPEG et PNG
             if (!req.file.mimetype.match(/^image\/(jpeg|png)$/))
                 throw new Error("invalid file");
@@ -37,10 +35,12 @@ module.exports.createPost = async (req, res) => {
                 req.file.buffer
             );
         }
-
+        const user = await userModel.findById(req.body.posterId);
+        if (!user) throw new Error("Utilisateur non trouvé");
         // Création du post (avec ou sans image)
-        const post = new PostModel({
+        const post = new postModel({
             posterId: req.body.posterId,
+            posterPseudo: user.pseudo,
             message: req.body.message,
             picture: req.file != null ? "./uploads/posts/" + fileName : "",
             video: req.body.video,
@@ -58,8 +58,9 @@ module.exports.createPost = async (req, res) => {
 
 module.exports.readPost = async (req, res) => {
     try {
-        const read = await PostModel.find();
-        res.status(200).json(read).sort({ createdAt: -1 });
+        const read = await postModel.find()
+            .sort({ createdAt: -1 });
+        res.status(200).json(read)
     } catch (err) {
         console.log("Error to get data: " + err);
     }
@@ -93,7 +94,7 @@ module.exports.deletePost = async (req, res) => {
     try {
         const postDelete = await postModel.findByIdAndDelete(req.params.id)
         if (!postDelete)
-            res.status(400).send({ message: "post not found. " });
+            return res.status(400).send({ message: "post not found. " });
         res.status(200).json({ message: "Successfully deleted. " });
     } catch (err) {
         console.log("Delete error : " + err);
@@ -176,7 +177,7 @@ module.exports.commentPost = async (req, res) => {
                         commenterId: req.body.commenterId,
                         commenterPseudo: req.body.commenterPseudo,
                         text: req.body.text,
-                        Timestamp: new Date().getTime()
+                        timestamp: new Date().getTime()
                     },
                 },
             },

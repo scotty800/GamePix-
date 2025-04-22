@@ -6,10 +6,14 @@ const postSchema = new mongoose.Schema(
             type: String,
             required: true
         },
+        posterPseudo: {
+            type: String,
+            required: true
+        },
         message: {
             type: String,
             trim: true,
-            maxLenght: 400
+            maxLength: 400
         },
 
         picture: {

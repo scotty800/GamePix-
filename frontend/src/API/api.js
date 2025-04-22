@@ -63,15 +63,15 @@ export const getAllUsers = async () => {
   }
 };
 
-export const uploadProfilePic = async (file, name) => {
+export const uploadProfilePic = async (file, userId) => {
   try {
     const formData = new FormData();
-    formData.append("file", file); // Fichier image
-    formData.append("name", name); // Nom de l'utilisateur
+    formData.append("file", file);
+    formData.append("name", userId)
 
-    const response = await apiInstance.post("/user/upload/profil", formData, {
+    const response = await apiInstance.post(`/user/upload/profil/${userId}`, formData, {
       headers: {
-        "Content-Type": "multipart/form-data", // Indique qu'on envoie un fichier
+        "Content-Type": "multipart/form-data",
       },
     });
 
@@ -123,6 +123,7 @@ export const getUserInfo = async (userId) => {
   }
 };
 
+
 export const updateUserBio = async (id, newBio) => {
   try {
     const response = await apiInstance.put(`/user/${id}`, { bio: newBio });
@@ -130,5 +131,95 @@ export const updateUserBio = async (id, newBio) => {
   } catch (err) {
     console.error("Erreur lors de la mise à jour de la bio", err);
     throw err;
+  }
+};
+
+export const createPost = async (formData) => {
+  try {
+    const response = await apiInstance.post('/post/', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || { message: "Erreur lors de la création du post" };
+  }
+};
+
+export const readPosts = async () => {
+  try {
+    const response = await apiInstance.get('/post/');
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || { message: "Erreur lors de la récupération des posts" };
+  }
+};
+
+export const updatePost = async (postId, message) => {
+  try {
+    const response = await apiInstance.patch(`/post/${postId}`, { message });
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || { message: "Erreur lors de la mise à jour du post" };
+  }
+};
+
+export const deletePost = async (postId) => {
+  try {
+    const response = await apiInstance.delete(`/post/${postId}`);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || { message: "Erreur lors de la suppression du post" };
+  }
+};
+
+export const likePost = async (postId, userId) => {
+  try {
+    const response = await apiInstance.patch(`/post/like-post/${postId}`, { id: userId });
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || { message: "Erreur lors du like" };
+  }
+};
+
+export const unlikePost = async (postId, userId) => {
+  try {
+    const response = await apiInstance.patch(`/post/unlike-post/${postId}`, { id: userId });
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || { message: "Erreur lors de l'unlike" };
+  }
+};
+
+export const commentPost = async (postId, commentData) => {
+  try {
+    const response = await apiInstance.patch(`/post/comment-post/${postId}`, commentData);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || { message: "Erreur lors de l'ajout du commentaire" };
+  }
+};
+
+export const editComment = async (postId, commentId, newText) => {
+  try {
+    const response = await apiInstance.patch(`/post/edit-comment-post/${postId}`, {
+      commentid: commentId,
+      text: newText
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || { message: "Erreur lors de la modification du commentaire" };
+  }
+};
+
+export const deleteComment = async (postId, commentId) => {
+  try {
+    const response = await apiInstance.patch(`/post/delete-comment-post/${postId}`, {
+      commentid: commentId
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || { message: "Erreur lors de la suppression du commentaire" };
   }
 };

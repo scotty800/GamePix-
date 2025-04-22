@@ -1,26 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { uploadProfilePic, getProfilePicture } from "../API/api";
+import React, { useState } from "react";
+import { uploadProfilePic } from "../API/api";
 import "../style/ProfileImg.css";
 
 export default function ProfileImg({ username }) {
     const [profilePic, setProfilePic] = useState(null);
-
-    useEffect(() => {
-        const fetchProfilePicture = async () => {
-            try {
-                if (username) {
-                    const response = await getProfilePicture(username);
-                    if (response?.imageUrl) {
-                        setProfilePic(response.imageUrl);
-                    }
-                }
-            } catch (error) {
-                console.error("Erreur de récupération de l'image :", error);
-            }
-        };
-
-        fetchProfilePicture();
-    }, [username]);
 
     const handleImageUpload = async (e) => {
         const file = e.target.files[0];
@@ -69,5 +52,3 @@ export default function ProfileImg({ username }) {
         </div>
     );
 }
-
-

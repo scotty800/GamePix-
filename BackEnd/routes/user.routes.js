@@ -20,7 +20,7 @@ router.patch("/unfollow/:id", userController.unfollow);
 
 
 // upload
-router.post('/upload/profil', upload.single('file') , uploadController.profilUpload);
+router.post('/upload/profil/:id', upload.single('file') , uploadController.profilUpload);
 router.get("/getprofilepic/:username", uploadController.getProfilePicture);
 
 module.exports = router;

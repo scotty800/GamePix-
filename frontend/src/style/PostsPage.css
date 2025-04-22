@@ -1,0 +1,48 @@
+/* PostsPage.css */
+
+.posts-page {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 50px;
+}
+
+.create-post-button {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.create-post-button button {
+  background-color: #0095f6;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.create-post-button button:hover {
+  background-color: #0077cc;
+}
+
+.posts-list {
+  flex-direction: column;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.error {
+  color: #ed4956;
+  padding: 20px;
+  background-color: rgba(237, 73, 86, 0.1);
+  border-radius: 8px;
+  margin: 20px;
+  text-align: center;
+}

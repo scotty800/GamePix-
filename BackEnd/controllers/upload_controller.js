@@ -6,49 +6,53 @@ const { uploadErrors } = require('../utils/errors.utils');
 module.exports.profilUpload = async (req, res) => {
     try {
         if (!req.file) {
-            throw new Error("No file uploaded");
+            return res.status(400).json({ message: "Aucun fichier uploadé" });
         }
 
-        if (
-            req.file.mimetype !== "image/jpg" &&
-            req.file.mimetype !== "image/png" &&
-            req.file.mimetype !== "image/jpeg"
-        ) {
-            throw new Error("Invalid file type");
+        // Vérification du type de fichier
+        if (!req.file.mimetype.match(/^image\/(jpeg|png|jpg)$/)) {
+            return res.status(400).json({ message: "Seuls les JPEG et PNG sont autorisés" });
         }
 
-        if (req.file.size >  10 * 1024 * 1024) {
-            throw new Error("File size exceeds the maximum allowed size of 10MB");
+        // Vérification de la taille
+        if (req.file.size > 2 * 1024 * 1024) { // 2MB max
+            return res.status(400).json({ message: "La taille maximale est de 2MB" });
         }
 
-        const fileName = req.body.name + ".jpg";
-        const uploadPath = path.join(__dirname, "../uploads/profil");
+        const userId = req.params.id;
+        const fileName = `profile-${userId}-${Date.now()}${path.extname(req.file.originalname)}`;
+        const uploadDir = path.join(__dirname, '../uploads/profiles');
+        const uploadPath = path.join(uploadDir, fileName);
 
-        if (!fs.existsSync(uploadPath)) {
-            fs.mkdirSync(uploadPath, { recursive: true });
+        // Créer le dossier s'il n'existe pas
+        if (!fs.existsSync(uploadDir)) {
+            fs.mkdirSync(uploadDir, { recursive: true });
         }
 
-        await fs.promises.writeFile(
-            path.join(uploadPath, fileName),
-            req.file.buffer
+        // Sauvegarder le fichier
+        await fs.promises.writeFile(uploadPath, req.file.buffer);
+
+        // Mettre à jour l'utilisateur
+        const updatedUser = await UserModel.findByIdAndUpdate(
+            userId,
+            { picture: `/uploads/profiles/${fileName}` },
+            { new: true }
         );
 
-        // ✅ Met à jour l'utilisateur après l'upload
-        const userPicture = await UserModel.findByIdAndUpdate(
-            req.params.userId,
-            { $set: { picture: "./uploads/profil/" + fileName } },
-            { new: true, upsert: true, setDefaultsOnInsert: true }
-        );
-
-        if (!userPicture) {
-            return res.status(404).send("User not found");
+        if (!updatedUser) {
+            // Supprimer le fichier uploadé si l'utilisateur n'existe pas
+            await fs.promises.unlink(uploadPath);
+            return res.status(404).json({ message: "Utilisateur non trouvé" });
         }
 
-        return res.status(200).json({ message: "File uploaded and user updated", user: userPicture });
+        return res.status(200).json({ 
+            picture: `/uploads/profiles/${fileName}`,
+            user: updatedUser
+        });
 
-    } catch (err) {
-        const errors = uploadErrors(err);
-        return res.status(400).json({ errors });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: "Erreur serveur" });
     }
 };
 
@@ -61,7 +65,7 @@ module.exports.getProfilePicture = async (req, res) => {
             return res.status(404).json({ message: "Photo de profil non trouvée" });
         }
 
-        res.status(200).json({ imageUrl: user.picture });
+        res.status(200).json({ imageUrl: `${process.env.BACKEND_URL}${user.picture}` });
     } catch (error) {
         res.status(500).json({ message: "Erreur serveur" });
     }

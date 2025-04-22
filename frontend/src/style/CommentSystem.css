@@ -1,0 +1,12 @@
+.comment {
+  display: flex;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.comment input[type="text"] {
+  flex-grow: 1;
+  padding: 5px;
+  margin-right: 5px;
+}
