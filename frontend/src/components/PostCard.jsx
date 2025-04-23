@@ -4,6 +4,7 @@ import { updatePost, deletePost } from '../API/api';
 import ProfileImg from './ProfileImg';
 import LikeSystem from './LikeSystem';
 import CommentSystem from './CommentSystem';
+import { convertToEmbedUrl } from "../utils/youtubeUrl";
 import '../style/PostCard.css';
 
 const PostCard = ({ post, refreshPosts }) => {
@@ -31,12 +32,12 @@ const PostCard = ({ post, refreshPosts }) => {
   };
 
   const formatDate = (dateString) => {
-    const options = { 
-      year: 'numeric', 
-      month: 'long', 
-      day: 'numeric', 
-      hour: '2-digit', 
-      minute: '2-digit' 
+    const options = {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
     };
     return new Date(dateString).toLocaleDateString('fr-FR', options);
   };
@@ -57,7 +58,7 @@ const PostCard = ({ post, refreshPosts }) => {
               <span className="post-date">{formatDate(post.createdAt)}</span>
             </div>
           </div>
-          
+
           {user?._id === post.posterId && (
             <div className="post-actions">
               <button className="edit-btn" onClick={() => setIsEditing(!isEditing)}>✏️</button>
@@ -68,8 +69,8 @@ const PostCard = ({ post, refreshPosts }) => {
 
         {isEditing ? (
           <div className="post-edit">
-            <textarea 
-              value={editedContent} 
+            <textarea
+              value={editedContent}
               onChange={(e) => setEditedContent(e.target.value)}
             />
             <div className="edit-actions">
@@ -81,9 +82,9 @@ const PostCard = ({ post, refreshPosts }) => {
           <div className="post-body">
             <p className="post-message">{post.message}</p>
             {post.picture && (
-              <img 
-                src={post.picture} 
-                alt={`Contenu posté par ${displayName}`} 
+              <img
+                src={post.picture}
+                alt={`Contenu posté par ${displayName}`}
                 className="post-image"
                 onError={(e) => {
                   e.target.style.display = 'none';
@@ -93,26 +94,27 @@ const PostCard = ({ post, refreshPosts }) => {
             {post.video && (
               <div className="post-video">
                 <iframe
-                  src={post.video}
+                  className="post-video-iframe"
+                  src={convertToEmbedUrl(post.video)}
                   title={`Vidéo postée par ${displayName}`}
-                  frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
                 />
               </div>
             )}
+
           </div>
         )}
 
         <div className="post-interactions">
-          <LikeSystem 
-            postId={post._id} 
-            initialLikes={post.likes || []} 
+          <LikeSystem
+            postId={post._id}
+            initialLikes={post.likes || []}
             userId={user?._id}
             refreshPosts={refreshPosts}
           />
-          <CommentSystem 
-            postId={post._id} 
+          <CommentSystem
+            postId={post._id}
             initialComments={post.comments || []}
             currentUser={user}
             refreshPosts={refreshPosts}

@@ -62,7 +62,6 @@
 
 .post-input {
   resize: none;
-  width: 100%;
   height: 100px;
   padding: 10px;
   background-color: transparent;
@@ -84,7 +83,8 @@
   margin-bottom: 10px;
 }
 
-.button-row button {
+.button-row button, 
+.button-row label {
   border-radius: 10px;
   border: none;
   padding: 8px 12px;
@@ -93,17 +93,22 @@
   cursor: pointer;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 5px;
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
+  height: 58px;
+  flex: 1;
+  min-width: 120px;
 }
 
-.button-row button:hover {
+.button-row button:hover, 
+.button-row label:hover {
   transform: translateY(-3px);
 }
 
-.button-row button .icon {
+.button-row .icon {
   font-size: 16px;
 }
 
@@ -115,8 +120,7 @@
   background: linear-gradient(180deg, #31c300 0%, #ab7811 100%);
 }
 
-.file-input,
-.video-input {
+.file-input {
   position: absolute;
   opacity: 0;
   width: 100%;
@@ -124,6 +128,40 @@
   top: 0;
   left: 0;
   cursor: pointer;
+}
+
+/* Style pour le champ URL vidéo */
+.video-url-container {
+  margin-top: 10px;
+  width: 100%;
+  animation: fadeIn 0.3s ease;
+}
+
+.video-url-input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #464646;
+  font-size: 14px;
+  background-color: #2a2a2a;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.video-url-input:focus {
+  outline: none;
+  border-color: #666;
+  box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.3);
+}
+
+.video-url-input::placeholder {
+  color: #888;
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .post {
@@ -136,6 +174,7 @@
   background: linear-gradient(145deg, #ff00e1, #0000ff, #00d9ff);
   cursor: pointer;
   transition: all 0.3s ease;
+  margin-top: 10px;
 }
 
 .post:hover {
@@ -154,6 +193,7 @@
   border-radius: 8px;
   color: white;
   font-size: 12px;
+  animation: fadeIn 0.3s ease;
 }
 
 .file-name {
@@ -171,3 +211,4 @@
   font-size: 16px;
   margin-left: auto;
 }
+

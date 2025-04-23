@@ -1,6 +1,6 @@
 /* Style général de la carte */
 .post-card {
-  --background: linear-gradient(to left, #f7ba2b 0%, #ea5358 100%);
+  --background: linear-gradient(to left, #2a1cb3 0%, #ea5358 100%);
   width: 100%;
   max-width: 500px;
   padding: 3px;
@@ -42,7 +42,8 @@
   gap: 10px;
 }
 
-.edit-btn, .delete-btn {
+.edit-btn,
+.delete-btn {
   background: none;
   border: none;
   cursor: pointer;
@@ -80,7 +81,8 @@
 .post-video {
   width: 100%;
   height: 0;
-  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  padding-bottom: 56.25%;
+  overflow: hidden;
   position: relative;
   margin-bottom: 10px;
 }
@@ -91,7 +93,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  border-radius: 8px;
+  border: none;
 }
 
 /* Édition du post */
@@ -114,7 +116,8 @@
   gap: 10px;
 }
 
-.save-btn, .cancel-btn {
+.save-btn,
+.cancel-btn {
   padding: 8px 15px;
   border-radius: 4px;
   border: none;
@@ -186,7 +189,8 @@
   gap: 10px;
 }
 
-.edit-btn, .delete-btn {
+.edit-btn,
+.delete-btn {
   background: none;
   border: none;
   cursor: pointer;
