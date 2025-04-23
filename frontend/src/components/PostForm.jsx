@@ -9,6 +9,7 @@ const PostForm = ({ refreshPosts }) => {
   const [image, setImage] = useState(null);
   const [videoUrl, setVideoUrl] = useState('');
   const [isExpanded, setIsExpanded] = useState(false);
+  const [showVideoInput, setShowVideoInput] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -30,6 +31,7 @@ const PostForm = ({ refreshPosts }) => {
       setImage(null);
       setVideoUrl('');
       setIsExpanded(false);
+      setShowVideoInput(false);
       refreshPosts();
     } catch (error) {
       console.error("Erreur:", error);
@@ -40,14 +42,13 @@ const PostForm = ({ refreshPosts }) => {
     if (e.target.files[0]) {
       setImage(e.target.files[0]);
       setVideoUrl('');
+      setShowVideoInput(false);
     }
   };
 
-  const handleVideoChange = (e) => {
-    setVideoUrl(e.target.value);
-    if (e.target.value) {
-      setImage(null);
-    }
+  const handleVideoClick = () => {
+    setShowVideoInput(!showVideoInput);
+    setImage(null);
   };
 
   return (
@@ -83,7 +84,7 @@ const PostForm = ({ refreshPosts }) => {
             />
             
             <div className="button-row">
-              <button type="button" className="upload">
+              <label className="upload">
                 <span className="icon">📷</span> Photo
                 <input
                   type="file"
@@ -91,19 +92,28 @@ const PostForm = ({ refreshPosts }) => {
                   onChange={handleImageChange}
                   className="file-input"
                 />
-              </button>
+              </label>
               
-              <button type="button" className="feeling">
+              <button 
+                type="button" 
+                className="feeling"
+                onClick={handleVideoClick}
+              >
                 <span className="icon">🎬</span> Vidéo
+              </button>
+            </div>
+
+            {showVideoInput && (
+              <div className="video-url-container">
                 <input
                   type="text"
                   value={videoUrl}
-                  onChange={handleVideoChange}
-                  placeholder="Lien YouTube"
-                  className="video-input"
+                  onChange={(e) => setVideoUrl(e.target.value)}
+                  placeholder="Collez le lien YouTube ici"
+                  className="video-url-input"
                 />
-              </button>
-            </div>
+              </div>
+            )}
             
             <button type="submit" className="post">
               Publier
