@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
 import { updatePost, deletePost } from '../API/api';
 import ProfileImg from './ProfileImg';
 import LikeSystem from './LikeSystem';
@@ -9,6 +10,7 @@ import '../style/PostCard.css';
 
 const PostCard = ({ post, refreshPosts }) => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [editedContent, setEditedContent] = useState(post.message);
 
@@ -31,6 +33,12 @@ const PostCard = ({ post, refreshPosts }) => {
     }
   };
 
+  const handleProfileClick = () => {
+    if (post.posterId) {
+      navigate(`/profile/${post.posterId}`);
+    }
+  };
+
   const formatDate = (dateString) => {
     const options = {
       year: 'numeric',
@@ -42,14 +50,13 @@ const PostCard = ({ post, refreshPosts }) => {
     return new Date(dateString).toLocaleDateString('fr-FR', options);
   };
 
-  // Déterminer le nom à afficher
   const displayName = post.posterPseudo || post.posterId?.pseudo || "Utilisateur";
 
   return (
     <div className="post-card">
       <div className="post-card-content">
         <div className="post-header">
-          <div className="user-info">
+          <div className="user-info" onClick={handleProfileClick} style={{ cursor: 'pointer' }}>
             <ProfileImg username={displayName} userId={post.posterId} size="small" />
             <div className="user-details">
               <span className="post-username" title={displayName}>
@@ -102,7 +109,6 @@ const PostCard = ({ post, refreshPosts }) => {
                 />
               </div>
             )}
-
           </div>
         )}
 
