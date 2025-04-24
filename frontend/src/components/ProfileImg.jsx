@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import { useAuth } from "../contexts/AuthContext";
 import { uploadProfilePic } from "../API/api";
 import "../style/ProfileImg.css";
 
-export default function ProfileImg({ username }) {
+export default function ProfileImg({ username, userId }) {
+    const { user } = useAuth();
     const [profilePic, setProfilePic] = useState(null);
 
     const handleImageUpload = async (e) => {
@@ -24,6 +26,8 @@ export default function ProfileImg({ username }) {
         }
     };
 
+    const isCurrentUser = user?._id === userId;
+
     return (
         <div className="profile-img-container">
             {profilePic ? (
@@ -39,16 +43,18 @@ export default function ProfileImg({ username }) {
                 </div>
             )}
             
-            <label htmlFor="file-upload" className="upload-btn">
-                +
-                <input
-                    id="file-upload"
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageUpload}
-                    style={{ display: "none" }}
-                />
-            </label>
+            {isCurrentUser && (
+                <label htmlFor="file-upload" className="upload-btn">
+                    +
+                    <input
+                        id="file-upload"
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageUpload}
+                        style={{ display: "none" }}
+                    />
+                </label>
+            )}
         </div>
     );
 }

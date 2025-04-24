@@ -60,7 +60,7 @@ const UserProfile = () => {
     try {
       const updatedProfileUser = await fetchProfileData();
       setProfileUser(updatedProfileUser);
-      
+
       if (currentUser) {
         const updatedCurrentUser = await getUserInfo(currentUser._id);
         updateUser(updatedCurrentUser);
@@ -89,7 +89,10 @@ const UserProfile = () => {
           {/* Colonne de profil */}
           <div className="profile-column">
             <div className="profile-header">
-              <ProfileImg username={profileUser.pseudo} size="large" />
+              <ProfileImg
+                username={profileUser.pseudo}
+                userId={profileUser._id}
+              />
               <h2>{profileUser.pseudo}</h2>
             </div>
             <Bio
@@ -118,8 +121,8 @@ const UserProfile = () => {
                 initialFollowed={currentUser?.following?.includes(profileUser._id)}
                 initialFollowersCount={profileUser.followers?.length || 0}
                 initialFollowingCount={
-                  isOwnProfile 
-                    ? currentUser?.following?.length || 0 
+                  isOwnProfile
+                    ? currentUser?.following?.length || 0
                     : profileUser.following?.length || 0
                 }
                 onFollowChange={updateProfileUserData}
@@ -134,10 +137,10 @@ const UserProfile = () => {
               <h3>Posts de {profileUser.pseudo}</h3>
               {posts.length > 0 ? (
                 posts.map(post => (
-                  <PostCard 
-                    key={post._id} 
-                    post={post} 
-                    refreshPosts={refreshPosts} 
+                  <PostCard
+                    key={post._id}
+                    post={post}
+                    refreshPosts={refreshPosts}
                   />
                 ))
               ) : (
