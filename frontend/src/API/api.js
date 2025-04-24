@@ -147,6 +147,19 @@ export const createPost = async (formData) => {
   }
 };
 
+export const getUserPosts = async (userId) => {
+  try {
+    const response = await apiInstance.get(`/post/user/${userId}`);
+    return response.data;
+  } catch (error) {
+    console.error('Erreur détaillée:', error.response?.data || error.message);
+    throw error.response?.data || { 
+      message: "Erreur lors de la récupération des posts utilisateur",
+      details: error.message
+    };
+  }
+};
+
 export const readPosts = async () => {
   try {
     const response = await apiInstance.get('/post/');

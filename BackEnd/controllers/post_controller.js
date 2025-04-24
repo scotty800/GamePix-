@@ -66,6 +66,19 @@ module.exports.readPost = async (req, res) => {
     }
 }
 
+module.exports.getUserPosts = async (req, res) => {
+    if (!ObjectID.isValid(req.params.id))
+        return res.status(400).send('ID utilisateur inconnu: ' + req.params.id);
+
+    try {
+        const posts = await postModel.find({ posterId: req.params.id }).sort({ createdAt: -1 });
+        res.status(200).json(posts)
+    } catch (err) {
+        console.log("Erreur lors de la récupération des posts utilisateur: " + err);
+        res.status(500).json({message: err.message})
+    }
+}
+
 module.exports.updatePost = async (req, res) => {
     if (!ObjectID.isValid(req.params.id))
         return res.status(400).send('ID unKnown' + req.params.id);

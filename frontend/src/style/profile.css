@@ -41,7 +41,6 @@
 
 .profile-header {
   position: sticky;
-  top: calc(var(--navbar-height) + 30px);
   padding: 25px;
   background: rgba(255, 255, 255, 0.05);
   border-radius: var(--border-radius);
@@ -72,6 +71,31 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+/* Section des posts */
+.posts-full-width {
+  grid-column: 1 / -1; /* Prend toute la largeur */
+  margin-top: 30px;
+}
+
+.user-posts-section {
+  width: 100%;
+}
+
+.user-posts-section h3 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: white;
+  font-size: 1.5rem;
+  padding-bottom: 15px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.user-posts-section > p {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.7);
+  font-style: italic;
+}
+
 /* Éléments communs */
 .loading, .error, .not-found {
   padding: 2rem;
@@ -84,11 +108,15 @@
 @media (max-width: 1000px) {
   .profile-page {
     grid-template-columns: 1fr;
+    width: 100%;
+    padding: 20px 15px;
   }
   
   .profile-header, .follower-section-enhanced {
     position: static;
   }
-}
 
-  
+  .posts-full-width {
+    margin-top: 20px;
+  }
+}
