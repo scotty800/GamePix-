@@ -4,7 +4,8 @@ import Layout from "../components/Layouts";
 import Login from "../pages/Login";
 import Home from "../pages/Home";
 import UserProfile from "../pages/Profile";
-import RequireAuth from "../components/RequireAuth"; // ✅ nouvel import
+import About from "../pages/About"; // Nouvel import
+import RequireAuth from "../components/RequireAuth";
 
 function AppRouter() {
   return (
@@ -12,8 +13,9 @@ function AppRouter() {
       <Routes>
         <Route path="/" element={<Navigate to="/login" replace />} />
 
-        {/* Public Route */}
+        {/* Public Routes */}
         <Route path="/login" element={<Login />} />
+        <Route path="/about" element={<About />} /> {/* Nouvelle route publique */}
 
         {/* Routes protégées avec Layout */}
         <Route element={<Layout />}>
@@ -40,4 +42,3 @@ function AppRouter() {
 }
 
 export default AppRouter;
-

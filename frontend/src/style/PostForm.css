@@ -21,18 +21,19 @@
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
 }
 
-/* Style du formulaire étendu */
 .post-form-container {
   position: fixed;
   left: 20px;
   bottom: 90px;
   width: 260px;
-  background: #1f1f1f;
-  box-shadow: 10px 10px 20px #0c0c0c, -10px -10px 20px #333333;
+  background: linear-gradient(135deg, #2d3b8e, #4c5ca3); /* Bleu métallique plus clair */
+  box-shadow: 6px 6px 15px rgba(255, 255, 255, 0.2), inset 0px 0px 10px rgba(255, 255, 255, 0.3); /* Effet de lumière subtile */
   padding: 15px;
   border-radius: 15px;
   z-index: 1000;
+  border: 2px solid rgba(255, 255, 255, 0.3); /* Bordure plus visible */
 }
+
 
 .post-form {
   display: flex;

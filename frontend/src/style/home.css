@@ -10,7 +10,7 @@ body {
 }
 
 .home-page {
-  background-color: #16171d;
+  background-color: #121b3d;
   min-height: 100vh;
 }
 
@@ -28,6 +28,6 @@ body {
   position: relative;
   overflow: hidden;
   z-index: 1;
-  background-color: #16171d;
+  background-color: #121b3d;
   padding: 20px 0;
 }
