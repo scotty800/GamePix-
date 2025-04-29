@@ -4,7 +4,8 @@ import Layout from "../components/Layouts";
 import Login from "../pages/Login";
 import Home from "../pages/Home";
 import UserProfile from "../pages/Profile";
-import About from "../pages/About"; // Nouvel import
+import About from "../pages/About";
+import Boutique from '../pages/Boutique';
 import RequireAuth from "../components/RequireAuth";
 
 function AppRouter() {
@@ -32,6 +33,14 @@ function AppRouter() {
             element={
               <RequireAuth>
                 <UserProfile />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/boutique"
+            element={
+              <RequireAuth>
+                <Boutique />
               </RequireAuth>
             }
           />

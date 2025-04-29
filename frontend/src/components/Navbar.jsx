@@ -34,6 +34,7 @@ export default function Navbar() {
             <nav className="navbar">
                 <Link to="/home" className="btn">Home</Link>
                 <Link to="/about" className="btn">About</Link>
+                <Link to="/boutique" className="btn">Boutique</Link>
 
                 {user ? (
                     <>

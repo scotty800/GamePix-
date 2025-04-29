@@ -236,3 +236,13 @@ export const deleteComment = async (postId, commentId) => {
     throw error.response?.data || { message: "Erreur lors de la suppression du commentaire" };
   }
 };
+
+export const getFreeGames = async () => {
+  try {
+    const response = await apiInstance.get('/free-games'); // Utilise votre route backend
+    return response.data;
+  } catch (error) {
+    console.error('Erreur API:', error);
+    throw error;
+  }
+};

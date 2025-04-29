@@ -3,6 +3,7 @@ require("dotenv").config({path: './config/.env'});
 const userRoutes = require('./routes/user.routes');
 const postRoutes = require('./routes/post.routes')
 const bodyParser = require("body-parser");
+const freeGamesRoutes = require('./routes/freeGames.routes');
 const cookieParser = require("cookie-parser");
 require("./config/db");
 const {checkUser, requireAuth} = require('./middleware/auth.middleware')
@@ -42,6 +43,7 @@ app.get('/jwtid', requireAuth, (req, res) => {
 //route
 app.use('/api/user', userRoutes);
 app.use('/api/post', postRoutes);
+app.use('/api', freeGamesRoutes);
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
